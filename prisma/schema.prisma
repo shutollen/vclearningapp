@@ -31,14 +31,15 @@ model Company {
 }
 
 model Document {
-  id          String   @id @default(cuid())
-  fileName    String
-  fileType    String
-  fileSize    Int
-  content     String?
-  createdAt   DateTime @default(now())
-  companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
+  id            String   @id @default(cuid())
+  fileName      String
+  fileType      String
+  fileSize      Int
+  content       String?
+  financialData String?  // JSON: extracted PL/BS/CF/metrics
+  createdAt     DateTime @default(now())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id])
 }
 
 model Conversation {

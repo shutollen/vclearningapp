@@ -39,6 +39,7 @@ export default function ConversationPage({ params }: { params: Promise<{ id: str
   const [initialLoading, setInitialLoading] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const isComposingRef = useRef(false)
 
   useEffect(() => {
     fetch(`/api/conversations/${id}/messages`)
@@ -81,7 +82,7 @@ export default function ConversationPage({ params }: { params: Promise<{ id: str
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !isComposingRef.current) {
       e.preventDefault()
       sendMessage()
     }
@@ -143,6 +144,8 @@ export default function ConversationPage({ params }: { params: Promise<{ id: str
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
+            onCompositionStart={() => { isComposingRef.current = true }}
+            onCompositionEnd={() => { isComposingRef.current = false }}
             placeholder="質問を入力（Shift+Enterで改行）"
             rows={1}
             className="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
